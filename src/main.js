@@ -1,3 +1,4 @@
+// main.js
 import { getImagesByQuery } from './js/pixabay-api.js';
 import {
   createGallery,
@@ -22,7 +23,6 @@ async function fetchImages(query, page) {
   showLoader();
   try {
     const data = await getImagesByQuery(query, page);
-    hideLoader();
 
     if (!data.hits.length) {
       iziToast.warning({
@@ -35,7 +35,6 @@ async function fetchImages(query, page) {
     }
 
     createGallery(data.hits);
-
     totalHits = data.totalHits;
 
     if (currentPage * 15 < totalHits) {
@@ -58,12 +57,13 @@ async function fetchImages(query, page) {
       });
     }
   } catch (error) {
-    hideLoader();
     console.error(error);
     iziToast.error({
       title: 'Error',
       message: 'Failed to load data',
     });
+  } finally {
+    hideLoader(); // гарантоване приховування лоадера
   }
 }
 
